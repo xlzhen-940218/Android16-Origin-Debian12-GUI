@@ -36,7 +36,7 @@ function install_package() {
 # 检查是否已设置UTF-8语言环境
 function check_utf8_locale() {
     local current_locale
-    current_locale=$(locale | grep -E "LANG=|LANGUAGE=" | grep -i "utf-8")
+    current_locale=$(locale | grep -E "LANG=|LANGUAGE=" | grep -i ".UTF-8")
     if [ -n "$current_locale" ]; then
         info "检测到已设置UTF-8语言环境:"
         locale | grep -E "LANG=|LANGUAGE="
@@ -45,6 +45,15 @@ function check_utf8_locale() {
         return 1
     fi
 }
+
+# 设置密码
+info "请设置droid的密码..."
+if sudo passwd -S droid | grep -q 'NP'; then
+    info "Setting password for droid user"
+    warn "droid:new_password" | sudo chpasswd
+else
+    warn "droid user already has a password, skipping"
+fi
 
 # 更新软件包列表
 info "正在更新软件包列表..."
@@ -112,8 +121,8 @@ info "正在配置VNC服务器..."
 mkdir -p ~/.vnc
 
 cat > ~/.vnc/config << 'EOF'
-session=desktop
-geometry=1280x720
+session=gnome
+geometry=1920x1080
 localhost=no
 alwaysshared
 EOF

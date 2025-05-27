@@ -24,19 +24,17 @@
 ### 前置条件
 
 - Android 16 系统终端环境
-- 已安装并配置好 Debian 12 系统
-- 具有 root 权限或 sudo 权限
 
 ### 安装步骤
 
-1. 将脚本保存到您的 Android 终端设备，例如保存为 `setup_debian_gui.sh`
+1. 将脚本保存到您的 Android 终端设备，例如保存为 `android16-terminal.sh`
 2. 赋予脚本执行权限：
    ```bash
-   chmod +x setup_debian_gui.sh
+   chmod +x android16-terminal.sh
    ```
 3. 运行脚本：
    ```bash
-   ./setup_debian_gui.sh
+   ./android16-terminal.sh
    ```
 
 ### PC 端连接步骤

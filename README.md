@@ -2,6 +2,8 @@
 
 ![Bash](https://img.shields.io/badge/Shell-Bash-green) ![Debian](https://img.shields.io/badge/OS-Debian%2012-red) ![VNC](https://img.shields.io/badge/Protocol-VNC-blue)
 
+**Chinese Documentation**: [README_CN.md](README_CN.md)
+
 ## Feature Overview
 
 This script is specifically designed for terminal environments on Android 16 systems, enabling quick configuration of graphical interface access for Debian 12. After configuration, you can access the native Debian 12 GUI environment within the Android terminal from your PC through the following steps:

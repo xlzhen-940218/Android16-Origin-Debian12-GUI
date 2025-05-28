@@ -188,3 +188,8 @@ sudo systemctl enable tigervncserver@:1.service || {
 prompt_continue "$(lang vnc_port_prompt)"
 
 info "$(lang complete)"
+
+info "install pinyin input method"
+sudo apt-install -y ibus ibus-pinyin
+info "configure ibus pinyin"
+im-config -n ibus

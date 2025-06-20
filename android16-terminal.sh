@@ -13,6 +13,18 @@ case $lang_choice in
     *) LANG="cn" ;;
 esac
 
+# ===== 新增密码设置选项 =====
+if [ "$LANG" = "cn" ]; then
+    read -p "是否为 droid 用户设置密码？(y/n): " set_pwd
+else
+    read -p "Set password for droid user? (y/n): " set_pwd
+fi
+
+if [ "$set_pwd" = "y" ] || [ "$set_pwd" = "Y" ]; then
+    sudo passwd droid
+fi
+# ===== 新增部分结束 =====
+
 # 多语言定义
 declare -A messages
 messages=(
@@ -89,13 +101,7 @@ function install_package() {
 }
 
 # 主程序开始
-info "$(lang set_password)"
-if sudo passwd -S droid | grep -q 'NP'; then
-    info "$(lang set_password)"
-    warn "droid:new_password" | sudo chpasswd
-else
-    warn "droid user already has a password, skipping"
-fi
+# ===== 已移除原有的密码判断逻辑 =====
 
 info "$(lang update_pkg)"
 sudo apt update || {

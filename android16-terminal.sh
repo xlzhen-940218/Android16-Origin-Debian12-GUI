@@ -145,6 +145,7 @@ if [ "$current_locale" = "zh_CN.UTF-8" ]; then
     echo "zh_CN.UTF-8 already set"
 else
     echo "zh_CN.UTF-8 not set"
+    sudo apt install locales
     sudo dpkg-reconfigure locales
 fi
 

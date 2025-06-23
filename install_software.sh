@@ -44,14 +44,14 @@ sudo apt install -y wget
 check_status
 
 # 下载并安装Clash Verge
-echo -e "\n${YELLOW}🛡️ 正在下载Clash Verge (v2.2.3 arm64)...${NC}"
+echo -e "\n${YELLOW}🛡️ 正在下载Clash Verge (v2.3.1 arm64)...${NC}"
 print_separator
-wget https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.2.3/Clash.Verge_2.2.3_arm64.deb
+wget https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.3.1/Clash.Verge_2.3.1_arm64.deb
 check_status
 
 echo -e "\n${YELLOW}🛠️ 正在安装Clash Verge...${NC}"
 print_separator
-sudo dpkg -i Clash.Verge_2.2.3_arm64.deb
+sudo dpkg -i Clash.Verge_2.3.1_arm64.deb
 sudo apt --fix-broken install -y
 check_status
 
@@ -70,7 +70,7 @@ check_status
 # 清理安装包
 echo -e "\n${YELLOW}🧹 正在清理安装包...${NC}"
 print_separator
-rm -f Clash.Verge_2.2.3_arm64.deb code_1.100.2-1747260559_arm64.deb
+rm -f Clash.Verge_2.3.1_arm64.deb code_1.100.2-1747260559_arm64.deb
 check_status
 
 echo -e "\n${GREEN} 安装Pi-Apps"

@@ -141,6 +141,9 @@ function check_utf8_locale() {
 
 current_locale=$(check_utf8_locale)  # 调用函数并获取返回值
 
+echo "current locale:"
+echo "$current_locale"
+
 if [ "$current_locale" = "zh_CN.UTF-8" ]; then
     echo "zh_CN.UTF-8 already set"
 else

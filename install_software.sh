@@ -51,8 +51,7 @@ check_status
 
 echo -e "\n${YELLOW}🛠️ 正在安装Clash Verge...${NC}"
 print_separator
-sudo dpkg -i Clash.Verge_2.3.1_arm64.deb
-sudo apt --fix-broken install -y
+sudo apt --fix-broken install ./Clash.Verge_2.3.1_arm64.deb
 check_status
 
 # 下载并安装VS Code

@@ -149,7 +149,9 @@ if [ "$current_locale" = "zh_CN.UTF-8" ]; then
 else
     echo "zh_CN.UTF-8 not set"
     sudo apt install locales
-    sudo dpkg-reconfigure locales
+    echo "export LC_ALL=zh_CN.UTF-8" >> ~/.bashrc
+    echo "export LANG=zh_CN.UTF-8" >> ~/.bashrc
+    echo "export LANGUAGE=zh_CN.UTF-8" >> ~/.bashrc
 fi
 
 install_package "tasksel"

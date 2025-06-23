@@ -73,6 +73,9 @@ print_separator
 rm -f Clash.Verge_2.2.3_arm64.deb code_1.100.2-1747260559_arm64.deb
 check_status
 
+echo -e "\n${GREEN} 安装Pi-Apps"
+wget -qO- https://raw.githubusercontent.com/Botspot/pi-apps/master/install | bash
+
 # 完成提示
 echo -e "\n${GREEN}🎉 所有软件安装完成！${NC}"
 echo -e "${BLUE}已安装以下软件：${NC}"

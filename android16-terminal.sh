@@ -181,7 +181,7 @@ info "Configuring VNC server..."
 mkdir -p ~/.vnc
 
 cat > ~/.vnc/config << 'EOF'
-session=kde
+session=kde-desktop
 geometry=1920x1080
 localhost=no
 alwaysshared

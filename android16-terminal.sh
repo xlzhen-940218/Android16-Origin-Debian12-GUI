@@ -200,6 +200,6 @@ prompt_continue "$(lang vnc_port_prompt)"
 info "$(lang complete)"
 
 info "install pinyin input method"
-sudo apt-install -y ibus ibus-pinyin
+sudo apt install ibus ibus-pinyin -y
 info "configure ibus pinyin"
 im-config -n ibus

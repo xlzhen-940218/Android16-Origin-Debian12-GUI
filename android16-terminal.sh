@@ -104,7 +104,12 @@ function install_package() {
 # ===== 已移除原有的密码判断逻辑 =====
 
 info "$(lang update_pkg)"
-sudo apt update || {
+sudo apt update -y || {
+    error "$(lang update_fail)"
+    exit 1
+}
+
+sudo apt upgrade -y || {
     error "$(lang update_fail)"
     exit 1
 }
@@ -148,7 +153,7 @@ if [ "$current_locale" = "zh_CN.UTF-8" ]; then
     echo "zh_CN.UTF-8 already set"
 else
     echo "zh_CN.UTF-8 not set"
-    sudo apt install locales
+    sudo apt install locales -y
     export LANGUAGE=zh_CN.UTF-8
     export LC_ALL=zh_CN.UTF-8
     export LANG=zh_CN.UTF-8

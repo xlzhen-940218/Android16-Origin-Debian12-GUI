@@ -46,12 +46,12 @@ check_status
 # 下载并安装Clash Verge
 echo -e "\n${YELLOW}🛡️ 正在下载Clash Verge (v2.3.1 arm64)...${NC}"
 print_separator
-wget https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.3.1/Clash.Verge_2.3.1_arm64.deb
+wget https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.3.2/Clash.Verge_2.3.2_arm64.deb
 check_status
 
 echo -e "\n${YELLOW}🛠️ 正在安装Clash Verge...${NC}"
 print_separator
-sudo apt --fix-broken install ./Clash.Verge_2.3.1_arm64.deb
+sudo apt --fix-broken install ./Clash.Verge_2.3.2_arm64.deb
 check_status
 
 # 下载并安装VS Code

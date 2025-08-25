@@ -167,6 +167,8 @@ sudo tasksel install kde-desktop || {
     exit 1
 }
 
+echo -e "[Autologin]\nUser=droid\nSession=plasma.desktop" | sudo tee /etc/sddm.conf
+
 install_package "tigervnc-standalone-server"
 install_package "tigervnc-common"
 

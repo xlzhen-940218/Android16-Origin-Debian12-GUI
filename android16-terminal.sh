@@ -167,6 +167,7 @@ sudo tasksel install kde-desktop || {
     exit 1
 }
 
+# 解决最新系统自带vnc无法登录问题
 echo -e "[Autologin]\nUser=droid\nSession=plasma.desktop" | sudo tee /etc/sddm.conf
 
 install_package "tigervnc-standalone-server"
@@ -194,13 +195,13 @@ localhost=no
 alwaysshared
 EOF
 
-echo ":1=droid" | sudo tee /etc/tigervnc/vncserver.users >/dev/null
+echo ":2=droid" | sudo tee /etc/tigervnc/vncserver.users >/dev/null
 
-sudo systemctl start tigervncserver@:1.service || {
+sudo systemctl start tigervncserver@:2.service || {
     error "Failed to start VNC service"
     exit 1
 }
-sudo systemctl enable tigervncserver@:1.service || {
+sudo systemctl enable tigervncserver@:2.service || {
     error "Failed to enable VNC service"
     exit 1
 }

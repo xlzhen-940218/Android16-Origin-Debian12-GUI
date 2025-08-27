@@ -195,13 +195,13 @@ localhost=no
 alwaysshared
 EOF
 
-echo ":2=droid" | sudo tee /etc/tigervnc/vncserver.users >/dev/null
+echo ":1=droid" | sudo tee /etc/tigervnc/vncserver.users >/dev/null
 
-sudo systemctl start tigervncserver@:2.service || {
+sudo systemctl start tigervncserver@:1.service || {
     error "Failed to start VNC service"
     exit 1
 }
-sudo systemctl enable tigervncserver@:2.service || {
+sudo systemctl enable tigervncserver@:1.service || {
     error "Failed to enable VNC service"
     exit 1
 }

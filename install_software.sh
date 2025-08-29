@@ -69,12 +69,12 @@ check_status
 # 下载并安装Bilibili客户端
 echo -e "\n${YELLOW}📺 正在下载Bilibili客户端 (v1.16.5-2 arm64)...${NC}"
 print_separator
-wget https://github.com/msojocs/bilibili-linux/releases/download/v1.16.5-2/io.github.msojocs.bilibili_1.16.5-2_arm64.deb
+wget https://github.com/msojocs/bilibili-linux/releases/download/v1.17.1-2/io.github.msojocs.bilibili_1.17.1-2_arm64.deb
 check_status
 
 echo -e "\n${YELLOW}🛠️ 正在安装Bilibili客户端...${NC}"
 print_separator
-sudo dpkg -i io.github.msojocs.bilibili_1.16.5-2_arm64.deb
+sudo dpkg -i io.github.msojocs.bilibili_1.17.1-2_arm64.deb
 sudo apt --fix-broken install -y
 check_status
 

@@ -12,6 +12,7 @@
 # --- 全局变量和初始化 ---
 LANG_CHOICE="cn"
 TARGET_USER=$(whoami)
+echo $TARGET_USER
 
 if [ "$(id -u)" -eq 0 ]; then
   echo -e "\033[0;31m[ERROR]\033[0m 请不要以 root 用户身份运行此脚本。请使用一个普通用户账户运行，脚本会在需要时请求 sudo 权限。"

@@ -12,7 +12,6 @@
 # --- 全局变量和初始化 ---
 LANG_CHOICE="cn"
 TARGET_USER=$(whoami)
-echo $TARGET_USER
 
 if [ "$(id -u)" -eq 0 ]; then
   echo -e "\033[0;31m[ERROR]\033[0m 请不要以 root 用户身份运行此脚本。请使用一个普通用户账户运行，脚本会在需要时请求 sudo 权限。"
@@ -73,10 +72,10 @@ messages=(
     ["confirm_banner_en"]="Installation Confirmation"
     ["confirm_intro_cn"]="将在系统上执行以下操作:"
     ["confirm_intro_en"]="The following actions will be performed on your system:"
-    ["confirm_user_cn"]="  - 用户: %s"
-    ["confirm_user_en"]="  - User: %s"
-    ["confirm_desktop_cn"]="  - 安装桌面: %s"
-    ["confirm_desktop_en"]="  - Install Desktop: %s"
+    ["confirm_user_cn"]="  - 用户: '$TARGET_USER'"
+    ["confirm_user_en"]="  - User: '$TARGET_USER'"
+    ["confirm_desktop_cn"]="  - 安装桌面: "
+    ["confirm_desktop_en"]="  - Install Desktop: "
     ["confirm_ssh_cn"]="  - 配置 SSH 服务 (端口 10022)"
     ["confirm_ssh_en"]="  - Configure SSH Service (Port 10022)"
     ["confirm_vnc_cn"]="  - 配置 VNC 服务 (端口 5901)"
@@ -176,8 +175,8 @@ function user_selections() {
     clear
     banner "$(lang confirm_banner)"
     echo "$(lang confirm_intro)"
-    printf "$(lang confirm_user)\n" $TARGET_USER
-    printf "$(lang confirm_desktop)\n" "$DESKTOP_NAME"
+    printf "$(lang confirm_user)\n"
+    printf "$(lang confirm_desktop) '$DESKTOP_NAME'\n"
     echo "$(lang confirm_ssh)"
     echo "$(lang confirm_vnc)"
     read -p "$(lang confirm_proceed)" confirm

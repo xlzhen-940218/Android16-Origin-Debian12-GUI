@@ -152,7 +152,7 @@ function user_selections() {
     case $lang_choice_num in 2) LANG_CHOICE="en" ;; *) LANG_CHOICE="cn" ;; esac
     
     read -p "$(lang set_password_prompt)" set_pwd
-    if [[ "$set_pwd" =~ ^[Yy]$ ]]; then passwd; fi
+    if [[ "$set_pwd" =~ ^[Yy]$ ]]; then sudo passwd $TARGET_USER; fi
 
     banner "$(lang desktop_select)"
     echo "1. KDE Plasma"; echo "2. GNOME"; echo "3. XFCE"; echo "4. MATE"; echo "5. Cinnamon"; echo "6. LXQt"; echo "7. LXDE"; echo "8. GNOME Flashback (经典模式)"
@@ -175,7 +175,7 @@ function user_selections() {
     clear
     banner "$(lang confirm_banner)"
     echo "$(lang confirm_intro)"
-    printf "$(lang confirm_user)\n" "$TARGET_USER"
+    printf "$(lang confirm_user)\n" $TARGET_USER
     printf "$(lang confirm_desktop)\n" "$DESKTOP_NAME"
     echo "$(lang confirm_ssh)"
     echo "$(lang confirm_vnc)"

@@ -52,7 +52,7 @@ VERSION_CLASH_WITHOUT_V="${LATEST_CLASH_RELEASE#v}"
 # 下载并安装Clash Verge
 echo -e "\n${YELLOW}🛡️ 正在下载Clash Verge (${LATEST_CLASH_RELEASE} arm64)...${NC}"
 print_separator
-wget https://github.com/clash-verge-rev/clash-verge-rev/releases/download/${LATEST_CLASH_RELEASE}/Clash.Verge_${VERSION_CLASH_WITHOUT_V}_arm64.deb -O Clash.Verge_${VERSION_CLASH_WITHOUT_V}_arm64.deb
+wget https://github.com/clash-verge-rev/clash-verge-rev/releases/download/${LATEST_CLASH_RELEASE}/Clash.Verge_${VERSION_CLASH_WITHOUT_V}_arm64.deb -O Clash.Verge_${VERSION_CLASH_WITHOUT_V}_arm64.deb -O Clash.Verge_${VERSION_CLASH_WITHOUT_V}_arm64.deb
 check_status
 
 echo -e "\n${YELLOW}🛠️ 正在安装Clash Verge...${NC}"
@@ -63,7 +63,7 @@ check_status
 # 下载并安装VS Code
 echo -e "\n${YELLOW}💻 正在下载VS Code (1.100.2 arm64)...${NC}"
 print_separator
-wget https://vscode.download.prss.microsoft.com/dbazure/download/stable/848b80aeb52026648a8ff9f7c45a9b0a80641e2e/code_1.100.2-1747260559_arm64.deb
+wget https://vscode.download.prss.microsoft.com/dbazure/download/stable/848b80aeb52026648a8ff9f7c45a9b0a80641e2e/code_1.100.2-1747260559_arm64.deb -O code_1.100.2-1747260559_arm64.deb
 check_status
 
 echo -e "\n${YELLOW}🛠️ 正在安装VS Code...${NC}"
@@ -81,7 +81,7 @@ VERSION_BILIBILI_WITHOUT_V="${LATEST_BILIBILI_RELEASE#v}"
 # 下载并安装Bilibili客户端
 echo -e "\n${YELLOW}📺 正在下载Bilibili客户端 (v1.16.5-2 arm64)...${NC}"
 print_separator
-wget https://github.com/msojocs/bilibili-linux/releases/download/${LATEST_BILIBILI_RELEASE}/io.github.msojocs.bilibili_${VERSION_BILIBILI_WITHOUT_V}_arm64.deb
+wget https://github.com/msojocs/bilibili-linux/releases/download/${LATEST_BILIBILI_RELEASE}/io.github.msojocs.bilibili_${VERSION_BILIBILI_WITHOUT_V}_arm64.deb -O io.github.msojocs.bilibili_${VERSION_BILIBILI_WITHOUT_V}_arm64.deb
 check_status
 
 echo -e "\n${YELLOW}🛠️ 正在安装Bilibili客户端...${NC}"

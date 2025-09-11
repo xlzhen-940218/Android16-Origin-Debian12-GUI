@@ -43,15 +43,21 @@ print_separator
 sudo apt install -y wget
 check_status
 
+# 方法1：使用官方API获取最新发布版本（推荐）
+LATEST_CLASH_RELEASE=$(curl -s https://api.github.com/repos/clash-verge-rev/clash-verge-rev/releases/latest | jq -r '.tag_name')
+echo "最新版本号: $LATEST_RELEASE"
+
+VERSION_CLASH_WITHOUT_V="${LATEST_CLASH_RELEASE#v}"
+
 # 下载并安装Clash Verge
-echo -e "\n${YELLOW}🛡️ 正在下载Clash Verge (v2.4.2 arm64)...${NC}"
+echo -e "\n${YELLOW}🛡️ 正在下载Clash Verge (${LATEST_CLASH_RELEASE} arm64)...${NC}"
 print_separator
-wget https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.4.2/Clash.Verge_2.4.2_arm64.deb
+wget https://github.com/clash-verge-rev/clash-verge-rev/releases/download/${LATEST_CLASH_RELEASE}/Clash.Verge_${VERSION_CLASH_WITHOUT_V}_arm64.deb -O Clash.Verge_${VERSION_CLASH_WITHOUT_V}_arm64.deb
 check_status
 
 echo -e "\n${YELLOW}🛠️ 正在安装Clash Verge...${NC}"
 print_separator
-sudo apt --fix-broken install ./Clash.Verge_2.4.2_arm64.deb
+sudo apt --fix-broken install ./Clash.Verge_${VERSION_CLASH_WITHOUT_V}_arm64.deb
 check_status
 
 # 下载并安装VS Code
@@ -66,22 +72,28 @@ sudo dpkg -i code_1.100.2-1747260559_arm64.deb
 sudo apt --fix-broken install -y
 check_status
 
+# 方法1：使用官方API获取最新发布版本（推荐）
+LATEST_BILIBILI_RELEASE=$(curl -s https://api.github.com/repos/msojocs/bilibili-linux/releases/latest | jq -r '.tag_name')
+echo "最新版本号: $LATEST_RELEASE"
+
+VERSION_BILIBILI_WITHOUT_V="${LATEST_BILIBILI_RELEASE#v}"
+
 # 下载并安装Bilibili客户端
 echo -e "\n${YELLOW}📺 正在下载Bilibili客户端 (v1.16.5-2 arm64)...${NC}"
 print_separator
-wget https://github.com/msojocs/bilibili-linux/releases/download/v1.17.1-2/io.github.msojocs.bilibili_1.17.1-2_arm64.deb
+wget https://github.com/msojocs/bilibili-linux/releases/download/${LATEST_BILIBILI_RELEASE}/io.github.msojocs.bilibili_${VERSION_BILIBILI_WITHOUT_V}_arm64.deb
 check_status
 
 echo -e "\n${YELLOW}🛠️ 正在安装Bilibili客户端...${NC}"
 print_separator
-sudo dpkg -i io.github.msojocs.bilibili_1.17.1-2_arm64.deb
+sudo dpkg -i io.github.msojocs.bilibili_${VERSION_BILIBILI_WITHOUT_V}_arm64.deb
 sudo apt --fix-broken install -y
 check_status
 
 # 清理安装包
 echo -e "\n${YELLOW}🧹 正在清理安装包...${NC}"
 print_separator
-rm -f Clash.Verge_2.3.1_arm64.deb code_1.100.2-1747260559_arm64.deb io.github.msojocs.bilibili_1.16.5-2_arm64.deb
+rm -f Clash.Verge_${VERSION_CLASH_WITHOUT_V}_arm64.deb code_1.100.2-1747260559_arm64.deb io.github.msojocs.bilibili_${VERSION_BILIBILI_WITHOUT_V}_arm64.deb
 check_status
 
 echo -e "\n${GREEN} 安装Pi-Apps"
@@ -92,7 +104,7 @@ echo -e "\n${GREEN}🎉 所有软件安装完成！${NC}"
 echo -e "${BLUE}已安装以下软件：${NC}"
 echo -e "${BLUE}• Chromium浏览器${NC}"
 echo -e "${BLUE}• wget下载工具${NC}"
-echo -e "${BLUE}• Clash Verge (v2.3.1)${NC}"
+echo -e "${BLUE}• Clash Verge (${LATEST_CLASH_RELEASE})${NC}"
 echo -e "${BLUE}• VS Code (1.100.2)${NC}"
-echo -e "${BLUE}• Bilibili客户端 (v1.16.5-2)${NC}"
+echo -e "${BLUE}• Bilibili客户端 (${LATEST_BILIBILI_RELEASE})${NC}"
 print_separator

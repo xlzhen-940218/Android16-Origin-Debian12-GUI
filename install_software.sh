@@ -61,15 +61,17 @@ sudo apt --fix-broken install ./Clash.Verge_${VERSION_CLASH_WITHOUT_V}_arm64.deb
 check_status
 
 # 下载并安装VS Code
-echo -e "\n${YELLOW}💻 正在下载VS Code (1.100.2 arm64)...${NC}"
+echo -e "\n${YELLOW}💻 正在下载VS Code (arm64)...${NC}"
 print_separator
-wget https://vscode.download.prss.microsoft.com/dbazure/download/stable/848b80aeb52026648a8ff9f7c45a9b0a80641e2e/code_1.100.2-1747260559_arm64.deb -O code_1.100.2-1747260559_arm64.deb
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null
+sudo apt update
 check_status
 
 echo -e "\n${YELLOW}🛠️ 正在安装VS Code...${NC}"
 print_separator
-sudo dpkg -i code_1.100.2-1747260559_arm64.deb
-sudo apt --fix-broken install -y
+sudo apt install code # 或者安装 code-insiders 用于 Insiders 版本
 check_status
 
 # 方法1：使用官方API获取最新发布版本（推荐）
@@ -93,7 +95,7 @@ check_status
 # 清理安装包
 echo -e "\n${YELLOW}🧹 正在清理安装包...${NC}"
 print_separator
-rm -f Clash.Verge_${VERSION_CLASH_WITHOUT_V}_arm64.deb code_1.100.2-1747260559_arm64.deb io.github.msojocs.bilibili_${VERSION_BILIBILI_WITHOUT_V}_arm64.deb
+rm -f Clash.Verge_${VERSION_CLASH_WITHOUT_V}_arm64.deb io.github.msojocs.bilibili_${VERSION_BILIBILI_WITHOUT_V}_arm64.deb
 check_status
 
 echo -e "\n${GREEN} 安装Pi-Apps"

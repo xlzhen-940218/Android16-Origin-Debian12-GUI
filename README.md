@@ -1,3 +1,4 @@
+## AD FocuSee  [Record Your Screen.Get Polished Videos Automatically.](https://focusee.imobie.com?ad=github-xlzhen) 
 # Android 16 Terminal Debian GUI Access Tool
 
 ![Bash](https://img.shields.io/badge/Shell-Bash-green) ![Debian](https://img.shields.io/badge/OS-Debian%2012-red) ![VNC](https://img.shields.io/badge/Protocol-VNC-blue)

@@ -32,7 +32,6 @@ NC='\033[0m'
 # --- 完整的多语言消息字典 ---
 declare -A messages
 messages=(
-    # 通用
     ["press_enter_cn"]="按回车键继续..."
     ["press_enter_en"]="Press Enter to continue..."
     ["invalid_option_cn"]="无效的选项，请重试。"
@@ -46,7 +45,6 @@ messages=(
     ["command_fail_cn"]="命令执行失败: %s"
     ["command_fail_en"]="Command failed: %s"
     
-    # 语言选择与欢迎
     ["welcome_banner_cn"]="欢迎使用 Debian 桌面环境一键安装脚本 (Android VM 特化版)"
     ["welcome_banner_en"]="Welcome to the Debian Desktop Environment Installer (Android VM Edition)"
     ["select_lang_prompt_cn"]="请选择脚本界面语言 / Please select script UI language:"
@@ -58,7 +56,6 @@ messages=(
     ["enter_lang_num_cn"]="输入数字 / Enter number (1/2): "
     ["enter_lang_num_en"]="Enter number / 输入数字 (1/2): "
     
-    # 用户交互
     ["set_password_prompt_cn"]="是否为用户 '$TARGET_USER' 设置或更改登录密码？(y/n): "
     ["set_password_prompt_en"]="Set or change the login password for user '$TARGET_USER'? (y/n): "
     ["desktop_select_cn"]="选择您想安装的桌面环境"
@@ -66,7 +63,6 @@ messages=(
     ["enter_desktop_num_cn"]="请输入您想安装的桌面环境编号: "
     ["enter_desktop_num_en"]="Please enter the number for the desktop environment: "
     
-    # 确认界面
     ["confirm_banner_cn"]="安装确认"
     ["confirm_banner_en"]="Installation Confirmation"
     ["confirm_intro_cn"]="将在系统上执行以下操作:"
@@ -82,7 +78,6 @@ messages=(
     ["confirm_proceed_cn"]="是否继续? (y/n): "
     ["confirm_proceed_en"]="Do you want to continue? (y/n): "
 
-    # 系统执行
     ["update_pkg_cn"]="正在更新软件包列表..."
     ["update_pkg_en"]="Updating package list..."
     ["upgrade_pkg_cn"]="正在升级已安装的软件包..."
@@ -100,7 +95,6 @@ messages=(
     ["vnc_config_cn"]="正在配置 TigerVNC 并修复 Android VM 环境依赖..."
     ["vnc_config_en"]="Configuring TigerVNC and fixing Android VM dependencies..."
     
-    # 附加组件
     ["android_share_banner_cn"]="正在挂载 Android 共享目录..."
     ["android_share_banner_en"]="Mounting Android shared directory..."
     ["input_method_prompt_cn"]="是否安装中文拼音输入法 (推荐 Fcitx5)? (y/n): "
@@ -114,7 +108,6 @@ messages=(
     ["apps_install_banner_cn"]="正在安装常用软件套件..."
     ["apps_install_banner_en"]="Installing common software suite..."
 
-    # 结束汇总 - 连接推荐
     ["final_summary_cn"]="🎉 所有配置已完成！"
     ["final_summary_en"]="🎉 All configurations completed!"
     ["final_client_title_cn"]="${GREEN}💻 推荐连接方式：${NC}"
@@ -126,15 +119,14 @@ messages=(
     ["final_client_adb_cn"]="      1. 手机 USB 连接电脑，并在开发者选项中开启【USB 调试】。\n      2. 在 Windows 终端执行命令: ${YELLOW}adb forward tcp:5901 tcp:5901${NC}\n      3. 电脑端打开 TigerVNC 客户端，连接地址填写: ${YELLOW}127.0.0.1:5901${NC}"
     ["final_client_adb_en"]="      1. Connect phone via USB and enable [USB Debugging].\n      2. Run in Windows CMD: ${YELLOW}adb forward tcp:5901 tcp:5901${NC}\n      3. Open TigerVNC client on PC, connect to: ${YELLOW}127.0.0.1:5901${NC}"
 
-    # 结束汇总 - 排障指南
     ["final_faq_title_cn"]="${RED}🛠️ 常见问题与解决方案：${NC}"
     ["final_faq_title_en"]="${RED}🛠️ Troubleshooting & FAQ:${NC}"
     ["final_faq_1_cn"]="  ${YELLOW}1. VNC 突然连不上、黑屏或一直超时？${NC}\n     -> 通常是 Android 强杀后台导致。请在多任务界面彻底划掉(关闭)终端 App，重新打开即可。建议在系统设置中将该 App 的【电池优化】改为【无限制】。"
     ["final_faq_1_en"]="  ${YELLOW}1. VNC connection refused, timeout, or black screen?${NC}\n     -> Usually caused by Android killing background processes. Swipe away/kill the terminal app, then reopen it. Set [Battery Optimization] to [Unrestricted] in Android settings."
     ["final_faq_2_cn"]="  ${YELLOW}2. 桌面无法输入中文 / Fcitx5 没出来？${NC}\n     -> 输入法框架需要重启桌面生效。请彻底重启终端 App，或者执行 'vncserver -kill :1 && vncserver :1' 重启 VNC。"
     ["final_faq_2_en"]="  ${YELLOW}2. Cannot type Chinese / Fcitx5 not showing?${NC}\n     -> Input framework needs a restart. Close and reopen the terminal app, or run 'vncserver -kill :1 && vncserver :1'."
-    ["final_faq_3_cn"]="  ${YELLOW}3. 桌面的 'Android文件' 共享目录是空的？${NC}\n     -> 请前往 Android 系统设置 -> 应用权限，确保赋予了该虚拟机 App 【访问所有文件 / 存储】 权限。"
-    ["final_faq_3_en"]="  ${YELLOW}3. The 'Android_Files' shared folder is empty?${NC}\n     -> Go to Android Settings -> App Permissions, and ensure the VM app has [All Files Access / Storage] permission."
+    ["final_faq_3_cn"]="  ${YELLOW}3. 桌面的 'Android文件' 共享目录是空的 / 报权限不足？${NC}\n     -> 确保你的 Android 虚拟机 App 拥有【访问所有文件】权限。若挂载点异常，可重启手机修复 Android 底层挂载。"
+    ["final_faq_3_en"]="  ${YELLOW}3. The 'Android_Files' shared folder is empty / Permission denied?${NC}\n     -> Ensure your VM App has [All Files Access] permission. If mount fails, restart your phone to reset Android mounts."
 )
 
 function lang() { local key="${1}_${LANG_CHOICE}"; printf -- "${messages[$key]}"; }
@@ -290,15 +282,26 @@ function setup_vnc() {
     run_cmd sudo systemctl restart tigervncserver@:1.service
 }
 
-# --- 步骤 7: 挂载 Android 共享目录 ---
+# --- 步骤 7: 挂载 Android 共享目录 (修复权限报错) ---
 function setup_android_shared() {
     banner "$(lang android_share_banner)"
     install_package "xdg-user-dirs"; xdg-user-dirs-update
-    sudo mkdir -p /mnt/shared
+    
+    # 【修复1】因 Android Root Squash，仅在目录不存在时创建，避免抛出权限不足
+    if [ ! -d "/mnt/shared" ]; then
+        sudo mkdir -p /mnt/shared 2>/dev/null || true
+    fi
+    
+    # 【修复2】重置可能被 root 锁定的个人配置目录权限
+    sudo chown -R $TARGET_USER:$TARGET_USER ~/.config 2>/dev/null || true
     
     DESKTOP_DIR=$(xdg-user-dir DESKTOP 2>/dev/null)
     if [ -z "$DESKTOP_DIR" ]; then DESKTOP_DIR="$HOME/Desktop"; fi
-    mkdir -p "$DESKTOP_DIR"
+    
+    if [ ! -d "$DESKTOP_DIR" ]; then
+        mkdir -p "$DESKTOP_DIR"
+    fi
+    sudo chown -R $TARGET_USER:$TARGET_USER "$DESKTOP_DIR" 2>/dev/null || true
     
     if [ "$LANG_CHOICE" == "cn" ]; then LINK_NAME="Android文件"; else LINK_NAME="Android_Files"; fi
     ln -sf /mnt/shared "$DESKTOP_DIR/$LINK_NAME"

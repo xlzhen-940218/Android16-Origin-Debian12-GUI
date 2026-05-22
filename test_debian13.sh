@@ -6,8 +6,9 @@
 # 适用系统: Debian 12 (Bookworm) / Debian 13 (Trixie)
 # 特点:
 #   - 修复了 Debian 13 中 SSH Socket 激活导致端口修改失效的问题。
-#   - 适配了 GNOME/KDE Plasma 6 在 Debian 13 默认使用 Wayland 导致 VNC 黑屏的问题 (强制 X11 会话)。
-#   - 增加了 sudo 依赖的提前校验。
+#   - 适配了 Debian 13 默认 Wayland 导致 VNC 黑屏的问题 (强制 X11 会话)。
+#   - 输入法框架升级为适配 Debian 13 更佳的 fcitx5。
+#   - 丰富了常用桌面与系统软件套件 (办公、多媒体、解压、开发工具等)。
 #   - 全面支持中英文双语界面切换。
 # ==============================================================================
 
@@ -117,12 +118,21 @@ messages=(
     ["vnc_passwd_prompt_en"]="Next, please set a password for your VNC session (at least 6 characters)."
     ["vnc_config_cn"]="正在配置 TigerVNC..."
     ["vnc_config_en"]="Configuring TigerVNC..."
-    ["input_method_prompt_cn"]="是否安装中文拼音输入法 (IBus Pinyin)? (y/n): "
-    ["input_method_prompt_en"]="Install Chinese Pinyin input method (IBus Pinyin)? (y/n): "
-    ["ime_install_banner_cn"]="正在安装中文输入法..."
-    ["ime_install_banner_en"]="Installing Chinese Input Method..."
-    ["ime_config_done_cn"]="输入法配置完成，您可能需要在桌面环境中手动启用它。"
-    ["ime_config_done_en"]="Input method configured. You may need to enable it manually in the desktop environment."
+    
+    # 软件安装新增部分
+    ["input_method_prompt_cn"]="是否安装中文拼音输入法 (推荐新一代的 Fcitx5)? (y/n): "
+    ["input_method_prompt_en"]="Install Chinese Pinyin input method (Fcitx5 recommended)? (y/n): "
+    ["ime_install_banner_cn"]="正在安装中文输入法 (Fcitx5)..."
+    ["ime_install_banner_en"]="Installing Chinese Input Method (Fcitx5)..."
+    ["ime_config_done_cn"]="输入法配置完成，重启桌面或 VNC 服务后即可生效。"
+    ["ime_config_done_en"]="Input method configured. It will take effect after restarting desktop or VNC service."
+    
+    ["common_apps_desc_cn"]="可选软件套件包含：\n  - 网页浏览器: Chromium\n  - 办公套件: LibreOffice (含中文语言包)\n  - 多媒体与图像: VLC 播放器, GIMP 图像编辑器\n  - 实用工具: Flameshot (截图), p7zip/unzip (解压缩), Remmina (远程桌面客户端)\n  - 系统与网络: htop, curl, wget, git"
+    ["common_apps_desc_en"]="Optional software suite includes:\n  - Web Browser: Chromium\n  - Office Suite: LibreOffice\n  - Media & Graphics: VLC Player, GIMP Image Editor\n  - Utilities: Flameshot (Screenshot), p7zip/unzip (Archives), Remmina (Remote Desktop)\n  - System & Network: htop, curl, wget, git"
+    ["common_apps_prompt_cn"]="是否安装上述常用桌面及系统软件套件? (y/n): "
+    ["common_apps_prompt_en"]="Install the above common desktop & system software suite? (y/n): "
+    ["apps_install_banner_cn"]="正在安装常用软件套件..."
+    ["apps_install_banner_en"]="Installing common software suite..."
 
     ["final_summary_cn"]="🎉 所有配置已完成！"
     ["final_summary_en"]="🎉 All configurations completed!"
@@ -167,7 +177,6 @@ function user_selections() {
     banner "$(lang desktop_select)"
     echo "1. KDE Plasma"; echo "2. GNOME"; echo "3. XFCE"; echo "4. MATE"; echo "5. Cinnamon"; echo "6. LXQt"; echo "7. LXDE"; echo "8. GNOME Flashback (经典模式)"
 
-    # 加入备用 session (Fallback) 以处理 Debian 13 中 X11 与 Wayland 的命名变更
     while true; do
         read -p "$(lang enter_desktop_num)" desktop_choice
         case $desktop_choice in
@@ -215,8 +224,6 @@ function prepare_system() {
 function setup_ssh() {
     banner "$(lang ssh_modify)"; install_package "openssh-server"
 
-    # 【核心修复1】处理 Debian 12.2+/Debian 13 引入的 SSH Socket 激活机制
-    # 如果 ssh.socket 存在并处于激活状态，禁用它并恢复传统的 ssh.service 模式，否则修改配置端口会无效
     if sudo systemctl is-active --quiet ssh.socket 2>/dev/null || sudo systemctl is-enabled --quiet ssh.socket 2>/dev/null; then
         info "Detecting ssh.socket. Reverting to ssh.service for custom port support..."
         sudo systemctl disable --now ssh.socket 2>/dev/null || true
@@ -225,11 +232,9 @@ function setup_ssh() {
 
     sudo sed -i -E -e 's/^#?\s*Port\s+[0-9]+/Port 10022/' -e 's/^#?\s*PasswordAuthentication\s+no/PasswordAuthentication yes/' /etc/ssh/sshd_config
     
-    # 防止因原生配置中没有这两行导致 sed 替换失败，主动追加
     if ! sudo grep -q "^Port 10022" /etc/ssh/sshd_config; then echo "Port 10022" | sudo tee -a /etc/ssh/sshd_config > /dev/null; fi
     if ! sudo grep -q "^PasswordAuthentication yes" /etc/ssh/sshd_config; then echo "PasswordAuthentication yes" | sudo tee -a /etc/ssh/sshd_config > /dev/null; fi
     
-    # 兼容处理服务名 (Debian 标准名为 ssh，部分衍生版或旧版可能仍用 sshd)
     if systemctl list-unit-files | grep -q "^ssh.service"; then
         run_cmd sudo systemctl restart ssh
     else
@@ -251,7 +256,6 @@ function setup_vnc() {
     info "$(lang vnc_passwd_prompt)"; run_cmd vncpasswd
     mkdir -p ~/.vnc
     
-    # 【核心修复2】针对 Debian 13 (Wayland 默认化) 动态匹配并修正桌面 Session 名称以强制走 X11
     ACTUAL_SESSION="$VNC_SESSION"
     if [ ! -f "/usr/share/xsessions/${VNC_SESSION}.desktop" ] && [ -n "$VNC_FALLBACK" ] && [ -f "/usr/share/xsessions/${VNC_FALLBACK}.desktop" ]; then
         ACTUAL_SESSION="$VNC_FALLBACK"
@@ -265,26 +269,59 @@ function setup_vnc() {
 	EOF
     info "$(printf "$(lang config_success)" "~/.vnc/config")"
     
-    # 显式创建目录（防止纯净版 Debian 缺失该配置路径）
     sudo mkdir -p /etc/tigervnc
     echo ":1=$TARGET_USER" | sudo tee /etc/tigervnc/vncserver.users >/dev/null
     info "$(printf "$(lang config_success)" "/etc/tigervnc/vncserver.users")"
     
     run_cmd sudo systemctl daemon-reload
-    # 忽略 enable 阶段由于系统级限制可能抛出的警告，确保 start 能够执行
     sudo systemctl enable tigervncserver@:1.service 2>/dev/null || true
     run_cmd sudo systemctl restart tigervncserver@:1.service
     info "$(lang vnc_port_prompt)"
 }
 
-# 步骤6: 可选组件
+# 步骤6: 可选组件 (输入法与常用软件)
 function optional_components() {
+    # 6.1 安装中文输入法
     read -p "$(lang input_method_prompt)" install_ime
     if [[ "$install_ime" =~ ^[Yy]$ ]]; then
         banner "$(lang ime_install_banner)"
-        install_package "ibus"; install_package "ibus-pinyin"
-        im-config -n ibus
+        install_package "fcitx5"
+        install_package "fcitx5-chinese-addons"
+        install_package "fcitx5-frontend-gtk3"
+        install_package "fcitx5-frontend-qt5"
+        install_package "im-config"
+        
+        im-config -n fcitx5
         info "$(lang ime_config_done)"
+    fi
+
+    # 6.2 安装丰富的常用软件套件
+    echo ""
+    echo -e "$(lang common_apps_desc)"
+    read -p "$(lang common_apps_prompt)" install_apps
+    if [[ "$install_apps" =~ ^[Yy]$ ]]; then
+        banner "$(lang apps_install_banner)"
+        
+        # 基础系统工具
+        install_package "curl"
+        install_package "wget"
+        install_package "git"
+        install_package "htop"
+        install_package "unzip"
+        install_package "p7zip-full"
+        
+        # 桌面应用程序
+        install_package "chromium"
+        install_package "vlc"
+        install_package "gimp"
+        install_package "flameshot"
+        install_package "remmina"
+        install_package "libreoffice"
+        
+        # 如果选择了中文界面，自动给 LibreOffice 安装中文包
+        if [ "$LANG_CHOICE" == "cn" ]; then
+            install_package "libreoffice-l10n-zh-cn"
+        fi
     fi
 }
 

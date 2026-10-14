@@ -119,6 +119,11 @@ messages=(
     ["final_client_adb_cn"]="      1. 手机 USB 连接电脑，并在开发者选项中开启【USB 调试】。\n      2. 在 Windows 终端执行命令: ${YELLOW}adb forward tcp:5901 tcp:5901${NC}\n      3. 电脑端打开 TigerVNC 客户端，连接地址填写: ${YELLOW}127.0.0.1:5901${NC}"
     ["final_client_adb_en"]="      1. Connect phone via USB and enable [USB Debugging].\n      2. Run in Windows CMD: ${YELLOW}adb forward tcp:5901 tcp:5901${NC}\n      3. Open TigerVNC client on PC, connect to: ${YELLOW}127.0.0.1:5901${NC}"
 
+    ["final_audio_title_cn"]="${GREEN}🔊 声音输出解决方案 (解决 VNC 无法发声)：${NC}"
+    ["final_audio_title_en"]="${GREEN}🔊 Audio Solution (Fix Missing Sound in VNC):${NC}"
+    ["final_audio_desc_cn"]="  - Android 16 虚拟机暂无物理声卡映射，推荐搭配开源音频客户端 【Simple Protocol Player】:\n      🔗 客户端下载: ${YELLOW}https://github.com/xlzhen-940218/SimpleProtocolPlayer/releases${NC}\n      1. 在 Linux 终端执行命令加载音频串流服务:\n         ${YELLOW}pactl load-module module-simple-protocol-tcp rate=44100 format=s16le channels=2 record=true port=12345${NC}\n      2. 手机打开 App，IP 填 ${YELLOW}127.0.0.1${NC}，端口 ${YELLOW}12345${NC}，模式选【扬声器】，点击开始串流即可播放桌面声音！"
+    ["final_audio_desc_en"]="  - Android 16 VM lacks native audio passthrough. Use companion app [Simple Protocol Player]:\n      🔗 App Download: ${YELLOW}https://github.com/xlzhen-940218/SimpleProtocolPlayer/releases${NC}\n      1. Run in Linux terminal to start audio streaming module:\n         ${YELLOW}pactl load-module module-simple-protocol-tcp rate=44100 format=s16le channels=2 record=true port=12345${NC}\n      2. Open App on phone, set IP ${YELLOW}127.0.0.1${NC}, port ${YELLOW}12345${NC}, mode [Speaker], and tap Start Stream!"
+
     ["final_faq_title_cn"]="${RED}🛠️ 常见问题与解决方案：${NC}"
     ["final_faq_title_en"]="${RED}🛠️ Troubleshooting & FAQ:${NC}"
     ["final_faq_1_cn"]="  ${YELLOW}1. VNC 突然连不上、黑屏或一直超时？${NC}\n     -> 通常是 Android 强杀后台导致。请在多任务界面彻底划掉(关闭)终端 App，重新打开即可。建议在系统设置中将该 App 的【电池优化】改为【无限制】。"
@@ -127,6 +132,8 @@ messages=(
     ["final_faq_2_en"]="  ${YELLOW}2. Cannot type Chinese / Fcitx5 not showing?${NC}\n     -> Input framework needs a restart. Close and reopen the terminal app, or run 'vncserver -kill :1 && vncserver :1'."
     ["final_faq_3_cn"]="  ${YELLOW}3. 桌面的 'Android文件' 共享目录是空的 / 报权限不足？${NC}\n     -> 确保你的 Android 虚拟机 App 拥有【访问所有文件】权限。若挂载点异常，可重启手机修复 Android 底层挂载。"
     ["final_faq_3_en"]="  ${YELLOW}3. The 'Android_Files' shared folder is empty / Permission denied?${NC}\n     -> Ensure your VM App has [All Files Access] permission. If mount fails, restart your phone to reset Android mounts."
+    ["final_faq_4_cn"]="  ${YELLOW}4. 桌面播放视频/网页没有声音？${NC}\n     -> Android 16 终端虚拟机目前缺少物理声卡映射。请使用上述 Simple Protocol Player 方案，将音频实时串流到手机播放。"
+    ["final_faq_4_en"]="  ${YELLOW}4. No audio output when playing videos/webpages?${NC}\n     -> Android 16 VM lacks native sound card mapping. Use the Simple Protocol Player solution above to stream desktop audio to your phone."
 )
 
 function lang() { local key="${1}_${LANG_CHOICE}"; printf -- "${messages[$key]}"; }
@@ -334,7 +341,7 @@ function optional_components() {
         install_package "curl"; install_package "wget"; install_package "git"; install_package "htop"
         install_package "unzip"; install_package "p7zip-full"; install_package "chromium"
         install_package "vlc"; install_package "gimp"; install_package "flameshot"
-        install_package "remmina"; install_package "libreoffice"
+        install_package "remmina"; install_package "libreoffice"; install_package "pulseaudio-utils"
         if [ "$LANG_CHOICE" == "cn" ]; then install_package "libreoffice-l10n-zh-cn"; fi
     fi
 }
@@ -348,10 +355,14 @@ function final_summary() {
     echo -e "$(lang final_client_pc)"
     echo -e "$(lang final_client_adb)\n"
     
+    echo -e "$(lang final_audio_title)"
+    echo -e "$(lang final_audio_desc)\n"
+
     echo -e "$(lang final_faq_title)"
     echo -e "$(lang final_faq_1)\n"
     echo -e "$(lang final_faq_2)\n"
     echo -e "$(lang final_faq_3)\n"
+    echo -e "$(lang final_faq_4)\n"
 }
 
 # --- 主程序入口 ---

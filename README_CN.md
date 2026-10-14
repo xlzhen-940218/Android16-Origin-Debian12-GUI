@@ -24,6 +24,7 @@
 - **全局中文环境与输入法修复**：突破虚拟机强制 `C.UTF-8` 的限制，自动配置全局中文 locale，安装 CJK 字体防方块字，并集成新一代 **Fcitx5** 中文拼音输入法。
 - **一键常用软件套件 (可选)**：提供一键安装 Chromium 浏览器、LibreOffice 办公套件、VLC 播放器、GIMP 图像编辑器以及完整系统工具链（htop, git, curl, unzip 等）。
 - **安全远程访问**：自动配置 SSH 服务（强制 IPv4 并在非标端口 `10022` 运行）与 TigerVNC 服务器（端口 `5901`）。
+- **支持无线音频串流**：针对 Android 16 虚拟机底层缺少物理声卡/virtio-sound 映射的问题，提供基于 PulseAudio TCP 模块的极低延迟音频串流方案，搭配开源安卓客户端 [Simple Protocol Player](https://github.com/xlzhen-940218/SimpleProtocolPlayer) 即可让手机扬声器实时播放 Debian 桌面声音。
 
 ---
 
@@ -83,6 +84,45 @@
 
 ---
 
+## 🔊 声音解决方案 (解决 VNC 桌面无法播放声音)
+
+目前 Android 16 原生 Linux 虚拟机（AVF/Terminal）尚未开放物理声卡或 virtio-sound 直通，导致在 VNC 桌面中播放视频、网页音频或音乐时默认无法发出声音。
+
+本方案通过 **PulseAudio TCP 协议模块** 将 Debian 虚拟机的音频实时无线串流至 Android 宿主机，通过手机扬声器发声：
+
+### 1. 安装安卓音频接收客户端
+
+在 Android 手机上下载并安装 PulseAudio 客户端 **Simple Protocol Player**：
+- 📥 **客户端下载**：[Simple Protocol Player Releases](https://github.com/xlzhen-940218/SimpleProtocolPlayer/releases)
+- 源码仓库：[xlzhen-940218/SimpleProtocolPlayer](https://github.com/xlzhen-940218/SimpleProtocolPlayer)
+
+### 2. 在 Debian 虚拟机中启动音频串流服务
+
+在 Debian 终端中执行以下命令（安装工具并加载模块）：
+
+```bash
+# 确保已安装 pactl 工具
+sudo apt install -y pulseaudio-utils
+
+# 加载音频流服务模块 (监听 12345 端口)
+pactl load-module module-simple-protocol-tcp rate=44100 format=s16le channels=2 record=true port=12345
+```
+
+> 💡 **提示**：如需开机或每次打开终端自动启动声音服务，可将上述 `pactl load-module ...` 命令追加到 `~/.bashrc` 文件末尾。
+
+### 3. 在手机端连接收听
+
+1. 打开手机上的 **Simple Protocol Player** App。
+2. **连接设置**：
+   - **IP 地址**：填写 `127.0.0.1`（手机与本地虚拟机共享回环网络）
+   - **音频端口**：填写 `12345`
+   - **工作模式**：选择 **扬声器 (接收端)**
+   - **音频格式**：默认 44100Hz / 立体声 / 缓冲区 50ms 即可
+3. 点击 **【开始串流】**，此时在 Debian 桌面中播放视频、音乐或网页，声音将即时通过手机扬声器流畅播放！
+4. *(进阶功能)*：该 App 同样支持“麦克风（发送端）”模式，可将手机麦克风作为电脑的虚拟麦克风输入给 Linux。
+
+---
+
 ## 🛠️ 常见问题与排障
 
 * **❓ VNC 突然连不上、黑屏或一直超时？**
@@ -94,6 +134,9 @@
 * **❓ 桌面的 "Android文件" 共享目录是空的，或者提示权限不足？**
 * **原因**：由于 Android 虚拟机的 Root Squash 机制或权限缺失导致。
 * **解决方案**：请确保您的终端 App 在系统设置中拥有【访问所有文件 / 存储】的权限。如果权限正常但依然无法挂载，请重启手机以重置 Android 底层的 VirtioFS 挂载状态。
+* **❓ VNC 桌面中播放视频或网页没有声音？**
+* **原因**：Android 16 虚拟机底层暂未提供虚拟音频驱动支持。
+* **解决方案**：请参考上方的【🔊 声音解决方案】，通过在 Debian 执行 `pactl load-module module-simple-protocol-tcp ...` 并配合手机端安装 [Simple Protocol Player](https://github.com/xlzhen-940218/SimpleProtocolPlayer) 即可完美输出声音。
 
 ---
 

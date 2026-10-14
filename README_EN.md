@@ -50,6 +50,18 @@ This script is specifically designed for terminal environments on Android 16 sys
    ```
 4. Enter the VNC password set during script execution
 
+## 🔊 Audio Solution (Fix Missing Sound in VNC)
+
+Android 16 Linux VM does not currently map physical sound cards to the guest system. You can stream desktop audio over loopback to your phone's speakers using PulseAudio and [Simple Protocol Player](https://github.com/xlzhen-940218/SimpleProtocolPlayer):
+
+1. **Install Android App**: Download [Simple Protocol Player APK](https://github.com/xlzhen-940218/SimpleProtocolPlayer/releases).
+2. **Start Audio Stream in Debian**:
+   ```bash
+   sudo apt install -y pulseaudio-utils
+   pactl load-module module-simple-protocol-tcp rate=44100 format=s16le channels=2 record=true port=12345
+   ```
+3. **Listen on Phone**: Open Simple Protocol Player, connect to `127.0.0.1:12345` in "Speaker (Receiver)" mode, and tap **Start Stream**.
+
 ## Script Function Details
 
 The script performs the following configurations sequentially:
